@@ -1,0 +1,56 @@
+<?jelly escape-by-default='true'?>
+<!--
+    Copyright (C) 2020 Modelon AB
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <!--
+    This Jelly script is used to produce the global configuration option.
+
+    Jenkins uses a set of tag libraries to provide uniformity in forms.
+    To determine where this tag is defined, first check the namespace URI,
+    and then look under $JENKINS/views/. For example, <f:section> is defined
+    in $JENKINS/views/lib/form/section.jelly.
+
+    It's also often useful to just check other similar scripts to see what
+    tags they use. Views are always organized according to its owner class,
+    so it should be straightforward to find them.
+  -->
+  <f:section title="EnhancedSVNTrigger">
+    <f:entry title="Default schedule" field="defaultSchedule" help="/descriptor/hudson.triggers.TimerTrigger/help/spec">
+      <f:textarea checkUrl="'${rootURL}/trigger/TimerTrigger/checkSpec?value='+encodeURIComponent(this.value)" />
+    </f:entry>
+    <f:optionalBlock title="Trigger cause label simplification" field="useLabelSimplifications" inline="true">
+        <f:entry>
+            <f:repeatableProperty field="labelSimplifications">
+                <f:entry title="">
+                    <div align="right">
+                        <f:repeatableDeleteButton />
+                    </div>
+                </f:entry>
+            </f:repeatableProperty>
+        </f:entry>
+    </f:optionalBlock>
+    <f:entry title="Commit message to build parameter rules" help="/descriptor/com.modelon.jenkins.enhancedSVNTrigger.model.CommitMessageParameterRule/help">
+        <f:repeatableProperty field="commitMessageParameterRules">
+            <f:entry title="">
+                <div align="right">
+                    <f:repeatableDeleteButton />
+                </div>
+            </f:entry>
+        </f:repeatableProperty>
+    </f:entry>
+  </f:section>
+</j:jelly>

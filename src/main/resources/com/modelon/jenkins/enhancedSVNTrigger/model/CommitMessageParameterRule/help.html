@@ -1,0 +1,41 @@
+<!--
+    Copyright (C) 2020 Modelon AB
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<p>
+    Definitions of commit message parameter extraction rules. Each rule
+    defines a <b>pattern</b>, <b>replacement</b> and <b>destination parameter</b>.
+    If matches are found, then they are exposed as parameters and environment
+    variables to the build.
+</p>
+<p>
+    If a build is triggered due to a commit in the repository, as opposed to
+    new repository location, then the pattern of each rule is applied to the
+    commit message of the triggering commit. If a match is found, then a
+    parameter with the given name and replacement value will be available to
+    the build.
+</p>
+<p>
+    The following magical <b>destination parameter</b>s are available and will
+    be treated specially when matched in the commit message:
+</p>
+<ul>
+    <li><b>TRIGGER_CAUSE</b>, replaces the default trigger cause generated
+        by this plugin</li>
+    <li><b>UPSTREAM_BUILD_URL</b>, if the resulting parameter resolves to an
+        URL which references an existing Jenkins build in this Jenkins
+        instance, then the triggered build will be marked as an downstream
+        build of the resolved build</li>
+</ul>
