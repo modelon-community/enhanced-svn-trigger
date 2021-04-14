@@ -165,6 +165,31 @@ public class TriggerCauseTest extends TestBase {
         verifier.assertEnvVars("TRIGGER_CAUSE", "this should be the trigger cause");
     }
 
+    @Test
+    public void triggerChangeEnvVarAdded() throws Exception {
+        String svnUrl = hostZipRepo("svnRepos/empty.zip");
+        FilePath repoCO = checkOut(svnUrl);
+        FreeStyleProject p = j.createFreeStyleProject();
+        EnvVarRecordBuilder verifier = new EnvVarRecordBuilder();
+        p.getBuildersList().add(verifier);
+        SubversionSCM scm = new SubversionSCM(svnUrl);
+        p.setScm(scm);
+        BuildTrigger t = addTrigger(p);
+
+        p.scheduleBuild2(0); // build started without our trigger
+        j.waitUntilNoActivity();
+        verifier.assertEnvVars("TRIGGER_CHANGE", null);
+
+        t.run(); // This will trigger a new build since we don't have any previous trigger info
+        j.waitUntilNoActivity();
+        verifier.assertEnvVars("TRIGGER_CHANGE", null);
+
+        editAndCommit(repoCO, "Second!", "a.txt");
+        t.run();
+        j.waitUntilNoActivity();
+        verifier.assertEnvVars("TRIGGER_CHANGE", svnUrl + "@1");
+    }
+
 
     @Test
     public void labelSimplification() throws Exception {

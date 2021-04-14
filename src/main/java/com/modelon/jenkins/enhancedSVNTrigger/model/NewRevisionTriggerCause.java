@@ -21,6 +21,7 @@ import java.util.List;
 import com.modelon.jenkins.enhancedSVNTrigger.BuildTrigger;
 import com.modelon.jenkins.enhancedSVNTrigger.model.polling.RepositoryRevision;
 
+import hudson.EnvVars;
 import hudson.scm.SubversionSCM.SvnInfo;
 
 public class NewRevisionTriggerCause extends TriggerCause {
@@ -48,6 +49,15 @@ public class NewRevisionTriggerCause extends TriggerCause {
 
     @Override
     public String triggerCauseLabel() {
+        return simplifiedLocationAtRevision();
+    }
+
+    @Override
+    protected void addTriggerChangeLabelIfNewRevision(EnvVars env) {
+        env.put(TRIGGER_CHANGE_LABEL, simplifiedLocationAtRevision());
+    }
+
+    private String simplifiedLocationAtRevision() {
         if (simplifiedLocation == null) {
             simplifiedLocation = BuildTrigger.getMyDescriptor().simplifyLabel(location);
         }

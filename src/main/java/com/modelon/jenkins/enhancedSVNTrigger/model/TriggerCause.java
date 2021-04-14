@@ -35,6 +35,7 @@ import hudson.scm.SubversionSCM.SvnInfo;
 public abstract class TriggerCause extends Cause {
 
     public static final String TRIGGER_CAUSE_LABEL = "TRIGGER_CAUSE";
+    public static final String TRIGGER_CHANGE_LABEL = "TRIGGER_CHANGE";
 
     private final Map<String, String> extraEnvVars;
     private final List<SvnInfo> revisionInfo;
@@ -46,13 +47,19 @@ public abstract class TriggerCause extends Cause {
 
     @Exported()
     public abstract String triggerCauseLabel();
-    
+
+
+    protected void addTriggerChangeLabelIfNewRevision(EnvVars env) {
+
+    }
+
     public abstract boolean shouldTriggerBuild();
     
     public void contributeEnvVars(EnvVars env) {
         if (!extraEnvVars.containsKey(TRIGGER_CAUSE_LABEL)) {
             env.put(TRIGGER_CAUSE_LABEL, triggerCauseLabel());
         }
+        addTriggerChangeLabelIfNewRevision(env);
         env.putAll(extraEnvVars);
     }
 
